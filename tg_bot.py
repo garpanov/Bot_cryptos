@@ -26,9 +26,13 @@ async def on_startup(bot):
 
     await create_db()
 
+    webhook_url = "https://bot-cryptos.onrender.com"
+    await bot.set_webhook(webhook_url, drop_pending_updates=True)
+
 
 async def on_shutdown(bot):
     print('бот лег')
+    await bot.delete_webhook()
 
 async def main():
     dp.startup.register(on_startup)
@@ -38,7 +42,8 @@ async def main():
 
     await bot.delete_webhook(drop_pending_updates=True)
     await bot.set_my_commands(commands=commands, scope=types.BotCommandScopeAllPrivateChats())
-    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types(), skip_updates=True)
+
 
 
 if __name__ == "__main__":
